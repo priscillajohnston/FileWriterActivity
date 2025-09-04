@@ -46,4 +46,23 @@ public class MyFileWriter {
             e.printStackTrace();
         }
     }
+
+    public static void hiddenFileCreator(String data, String fileName){
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
+            bufferedWriter.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void fileInPriv(String data, String fileName, String secretFolder){
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
+            bufferedWriter.write(data);
+            Path oldPath = Paths.get("./" + fileName);
+            Path newPath = Paths.get(secretFolder + "/" + fileName);
+            Files.move(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
