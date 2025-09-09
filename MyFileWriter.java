@@ -72,4 +72,8 @@ private static void printFileSize(String fileName) {
     File file = new File("./" + fileName);
     System.out.println(file.length());
 }
+
+public static String toString(String fileName){
+    return "File Name Is: filewriter";
+}
 }
