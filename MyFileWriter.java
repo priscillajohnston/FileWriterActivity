@@ -10,6 +10,7 @@ public class MyFileWriter {
         String fileName3 = "example3.txt";
         String fileName4 = "example4.txt";
         String fileName5 = "example5.txt";
+        printFileSize("tester.txt");
 
         // 1. Using FileWriter
         try (FileWriter writer = new FileWriter(fileName1)) {
@@ -65,4 +66,10 @@ public class MyFileWriter {
             e.printStackTrace();
         }
     }
+
+    // Calculate and print the file size using the File class
+private static void printFileSize(String fileName) {
+    File file = new File("./" + fileName);
+    System.out.println(file.length());
+}
 }
