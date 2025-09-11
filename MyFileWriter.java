@@ -10,7 +10,7 @@ public class MyFileWriter {
         String fileName3 = "example3.txt";
         String fileName4 = "example4.txt";
         String fileName5 = "example5.txt";
-        printFileSize("tester.txt");
+        printFileSize("PrissySecret.txt", "PrissyTwo.txt");
 
         // 1. Using FileWriter
         try (FileWriter writer = new FileWriter(fileName1)) {
@@ -68,9 +68,15 @@ public class MyFileWriter {
     }
 
     // Calculate and print the file size using the File class
-private static void printFileSize(String fileName) {
-    File file = new File("./" + fileName);
-    System.out.println(file.length());
+private static void printFileSize(String... fileNames) {
+    long totalSize = 0;
+    for (String fileName : fileNames) {
+        File file = new File(fileName);
+        if (file.exists()) {
+            totalSize += file.length();
+        }
+    }
+    System.out.println("Total size of all files: " + totalSize + " bytes");
 }
 
 public static String toString(String fileName){
