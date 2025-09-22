@@ -3,7 +3,7 @@ import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
 
 public class MyFileWriter {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String data = "Hello, World!";
         String fileName1 = "example.txt";
         String fileName2 = "example2.txt";
@@ -11,6 +11,7 @@ public class MyFileWriter {
         String fileName4 = "example4.txt";
         String fileName5 = "example5.txt";
         printFileSize("tester.txt");
+        hashFile("example5.txt");
 
         // 1. Using FileWriter
         try (FileWriter writer = new FileWriter(fileName1)) {
@@ -48,7 +49,7 @@ public class MyFileWriter {
         }
     }
 
-    public static void hiddenFileCreator(String data, String fileName){
+    public static void hiddenFileCreator(String data, String fileName) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
             bufferedWriter.write(data);
         } catch (IOException e) {
@@ -56,7 +57,7 @@ public class MyFileWriter {
         }
     }
 
-    public static void fileInPriv(String data, String fileName, String secretFolder){
+    public static void fileInPriv(String data, String fileName, String secretFolder) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
             bufferedWriter.write(data);
             Path oldPath = Paths.get("./" + fileName);
@@ -68,12 +69,28 @@ public class MyFileWriter {
     }
 
     // Calculate and print the file size using the File class
-private static void printFileSize(String fileName) {
-    File file = new File("./" + fileName);
-    System.out.println(file.length());
-}
+    private static void printFileSize(String fileName) {
+        File file = new File("./" + fileName);
+        System.out.println(file.length());
+    }
 
-public static String toString(String fileName){
-    return "File Name Is: filewriter";
-}
+    public static String toString(String fileName) {
+        return "File Name Is: filewriter";
+    }
+
+    public static void hashFile(String filePath) throws IOException {
+        Path pathToFile = Paths.get("./" + filePath);
+        byte[] hash = Files.readAllBytes(pathToFile);
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+    
+   
+    }
+
 }
