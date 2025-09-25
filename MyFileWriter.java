@@ -1,6 +1,8 @@
 import java.io.*;
 import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MyFileWriter {
     public static void main(String[] args) throws IOException {
@@ -11,7 +13,8 @@ public class MyFileWriter {
         String fileName4 = "example4.txt";
         String fileName5 = "example5.txt";
         printFileSize("tester.txt");
-        hashFile("example5.txt");
+        String testWorld = "";
+        
 
         // 1. Using FileWriter
         try (FileWriter writer = new FileWriter(fileName1)) {
@@ -43,10 +46,15 @@ public class MyFileWriter {
 
         // 5. Using Files (java.nio.file)
         try {
-            Files.write(Paths.get(fileName5), data.getBytes(StandardCharsets.UTF_8));
+            Files.write(Paths.get(fileName5), testWorld.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        hashFile("hellohi.txt");
+        // if(hashFile("moviescript.txt").equals("f2931088e20bc4d3fb70d06a655cba8b053dd0279b5c112a0812ae5fc2c4e05f")){
+        //     System.out.println("works equal");
+        // }
     }
 
     public static void hiddenFileCreator(String data, String fileName) {
@@ -78,19 +86,39 @@ public class MyFileWriter {
         return "File Name Is: filewriter";
     }
 
-    public static void hashFile(String filePath) throws IOException {
-        Path pathToFile = Paths.get("./" + filePath);
-        byte[] hash = Files.readAllBytes(pathToFile);
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
+    public static String hashFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        if(!file.exists()){
+            throw new FileNotFoundException("file doesnt exist!");
         }
-    
-   
+        Path pathToFile = Paths.get("./" + filePath);
+        byte[] fileBytes = Files.readAllBytes(pathToFile);
+
+        String fileString = new String(fileBytes);
+        System.out.println(fileString);
+
+        try {
+            // Get an instance of the SHA-256 message digest algorithm
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            // Compute the hash of the input string
+            byte[] hash = md.digest(fileString.getBytes());
+
+            // Convert the byte array hash to a hexadecimal string
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+            System.out.println(hexString.toString());
+            
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            // Handle the case where SHA-256 algorithm is not available
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 }
